@@ -1,0 +1,106 @@
+@startuml clasesSalones
+left to right direction
+
+
+class Usuario {
+    - id: int
+    - nombre: String
+    - correoCorporativo: String
+    + iniciarSesion(): boolean
+}
+
+class Estudiante {
+    - matricula: String
+    + solicitarReserva(instalacion: Instalacion, inicio: Date, fin: Date, recursos: List<Recurso>): Reserva
+    + cancelarReserva(reserva: Reserva): boolean
+}
+
+class Docente {
+    - departamento: String
+    + solicitarReserva(instalacion: Instalacion, inicio: Date, fin: Date, recursos: List<Recurso>): Reserva
+    + autorizarReserva(reserva: Reserva): boolean
+}
+
+class Administrador {
+    + crearInstalacion(inst: Instalacion): void
+    + editarInstalacion(inst: Instalacion): void
+    + gestionarUsuario(u: Usuario): void
+    + generarReporte(fechaInicio: Date, fechaFin: Date): Reporte
+    + integrarCalendarioAcademico(cal: CalendarioAcademico): void
+}
+
+class Instalacion {
+    - id: int
+    - nombre: String
+    - capacidad: int
+    - ubicacion: String
+    - estado: String        ' ej. Activa / En mantenimiento
+    - recursos: List<Recurso>
+    + comprobarDisponibilidad(inicio: Date, fin: Date): boolean
+    + actualizarDatos(): void
+}
+
+class Recurso {
+    - id: int
+    - nombre: String
+    - tipo: String          ' ej. Proyector, Microfono
+    - cantidad: int
+    + reservar(cantidad: int): boolean
+}
+
+class Reserva {
+    - id: int
+    - solicitante: Usuario
+    - instalacion: Instalacion
+    - inicio: Date
+    - fin: Date
+    - estado: String        ' ej. Pendiente / Confirmada / Cancelada
+    - motivo: String
+    - recursosSolicitados: List<Recurso>
+    + confirmar(): void
+    + cancelar(): void
+    + tieneConflicto(): boolean
+}
+
+class Notificacion {
+    - id: int
+    - mensaje: String
+    - fechaEnvio: Date
+    + enviar(usuario: Usuario): void
+}
+
+class CalendarioAcademico {
+    - id: int
+    - nombre: String
+    - eventos: List<Reserva>
+    + sincronizarReserva(reserva: Reserva): void
+    + eliminarEvento(reserva: Reserva): void
+}
+
+class Reporte {
+    - id: int
+    - titulo: String
+    - contenido: String
+    - fechaGeneracion: Date
+    + exportar(formato: String): File
+}
+
+' --- Herencias ---
+Usuario <|-- Estudiante
+Usuario <|-- Docente
+Usuario <|-- Administrador
+
+' --- Asociaciones / multiplicidades ---
+Instalacion "1" --> "*" Recurso
+Instalacion "1" --> "*" Reserva
+Estudiante "1" --> "*" Reserva
+Docente "1" --> "*" Reserva
+Reserva "1" --> "*" Notificacion
+Reserva "1" --> "*" Recurso
+CalendarioAcademico "1" <-- "*" Reserva
+Administrador "1" --> "*" Instalacion
+Administrador "1" --> "*" Reporte
+
+@enduml
+
+

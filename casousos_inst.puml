@@ -1,0 +1,49 @@
+@startuml casousoDolca
+left to right direction
+
+actor "Estudiante" as est 
+actor "Docente/Maestro" as maestro
+actor "Administrador" as admin 
+
+rectangle "Sistema de asignación de instalaciones" {
+
+    usecase "Iniciar sesión" as UC1
+    usecase "Visualizar disponibilidad de instalaciones" as UC2
+    usecase "Realizar reservas" as UC3
+    usecase "Cancelar reservas" as UC4
+    usecase "Gestionar instalaciones" as UC5
+    usecase "Gestionar usuarios" as UC6
+    usecase "Generar reportes" as UC7
+    usecase "Notificar cambios" as UC8
+    usecase "Integrar con calendario académico" as UC9
+
+}
+
+
+est --> UC1
+est --> UC2
+est --> UC3
+est --> UC4
+
+
+maestro --> UC1
+maestro --> UC2
+maestro --> UC3
+maestro --> UC4
+maestro --> UC7
+maestro --> UC8
+
+
+UC1 <-- admin
+UC2 <-- admin
+UC3 <-- admin
+UC4 <-- admin
+UC5 <-- admin
+UC6 <-- admin
+UC7 <-- admin
+UC8 <-- admin
+UC9 <-- admin
+ 
+
+
+@enduml
